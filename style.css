@@ -98,10 +98,10 @@ nav ul li a:hover, a.active{
 }
 .plus-minus-btn{
     color: #3352F2;
-    font-size: 30px;
+    font-size: 27px;
     padding: 2px;
     margin: 10px 5px 0px 0px;
-    word-spacing: 20px;
+    word-spacing: 5px;
 }
 .booking-form .inputs{
     display: grid;
@@ -121,4 +121,12 @@ nav ul li a:hover, a.active{
 .amount{
     display: flex;
     justify-content: space-between;
+}
+.Sign{
+    padding-left:9px;
+    padding-right: 9px;
+    border: 1px solid green;
+}
+.Sign:hover{
+    cursor: pointer;
 }

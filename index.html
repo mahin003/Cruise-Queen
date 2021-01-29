@@ -31,7 +31,9 @@
 
         <div class="booking-content">
             <h1>Cruise Queen</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book./p>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book./p>
         </div>
 
 
@@ -39,7 +41,7 @@
             <h3>Book Ocean Time</h3>
             <div class="input-group">
                 <label for="">Flying From</label>
-                <input class="inp-style" type="text" name="" placeholder="Dhake, Bangladesh">
+                <input class="inp-style" type="text" name="" placeholder="Dhaka, Bangladesh">
             </div>
             <div class="input-group">
                 <label for="">Flying To</label>
@@ -48,7 +50,7 @@
             <div class="inputs">
                 <div class="input-group">
                     <label" for="">Departure</label>
-                    <input class="inp-style" type="date" name="">
+                        <input class="inp-style" type="date" name="">
                 </div>
                 <div class="input-group">
                     <label for="">Return</label>
@@ -58,20 +60,22 @@
             <div class="input-group f-class">
                 <div>
                     <label for="">First Class ($150)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <input class="inp-style inp-width" type="number" name="" id="FirstClassBox">
                 </div>
                 <div class="plus-minus-btn">
-                    <p>+ -</p>
+                    <p><span class="Sign" id="FirstClassPlus">+</span> <span class="Sign"
+                            id="FirstClassMinus">-</span></p>
                 </div>
             </div>
-            
+
             <div class="input-group f-class">
                 <div>
                     <label for="">Economy ($100)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <input class="inp-style inp-width" type="number" name="" id="EconomyClassBox">
                 </div>
                 <div class="plus-minus-btn">
-                    <p> <span>+</span> <span>-</span> </p>
+                    <p><span id="EconomyClassPlus" class="Sign">+</span> <span class="Sign"
+                            id="EconomyClassMinus">-</span></p>
                 </div>
             </div>
             <div class="calculations">
@@ -80,7 +84,7 @@
                         <p>Subtotal</p>
                     </div>
                     <div class="right">
-                        <p>$500</p>
+                        <p>$<span id="SubTotal">0</span></p>
                     </div>
                 </div>
 
@@ -89,7 +93,7 @@
                         <p>Charge 10% VAT</p>
                     </div>
                     <div class="right">
-                        <p>$50</p>
+                        <p>$<span id="Vat">0</span></p>
                     </div>
                 </div>
                 <hr>
@@ -98,15 +102,107 @@
                         <h4>Total</h4>
                     </div>
                     <div class="right">
-                        <p>$550</p>
+                        <p>$<span id="Total">0</span> </p>
                     </div>
                 </div>
             </div>
-            <button class="btn-style">Book Now</button>
+            <button class="btn-style" id="bookNow">Book Now</button>
         </div>
     </main>
 
     <!--Thank You-->
+    <!--JS starts here-->
+    <script>
+        //Getting Plus and Minus Sign eventListener
+        const FirstPlus = document.getElementById("FirstClassPlus");
+        FirstPlus.addEventListener("click", function () { PlusSign("FirstClassBox", 150); });
+
+        const EconomyPlus = document.getElementById("EconomyClassPlus");
+        EconomyPlus.addEventListener("click", function () { PlusSign("EconomyClassBox", 100); })
+
+        const FirstMinus = document.getElementById("FirstClassMinus");
+        FirstMinus.addEventListener("click", function () { MinusSign("FirstClassBox", 150); });
+
+        const EconomyMinus = document.getElementById("EconomyClassMinus");
+        EconomyMinus.addEventListener("click", function () { MinusSign("EconomyClassBox", 100); })
+
+        //Function called when only PLUS  sign is clicked   
+        function PlusSign(InputBox, price) {
+            var incrementValue = GetInputValue(InputBox);
+            console.log(incrementValue);
+            incrementValue++;
+            console.log(incrementValue);
+            document.getElementById(InputBox).value = incrementValue;
+            //for firdtclass price 150
+            //FOR economy class price 100
+            SetValues(price);
+
+        }
+
+        //Function called when only Minus  sign is clicked
+        function MinusSign(InputBox, price) {
+            decrementValue = GetInputValue(InputBox);
+            decrementValue--;
+            if (decrementValue < 0) {
+                return;
+            }
+            document.getElementById(InputBox).value = decrementValue;
+            SetValues(-1 * price);
+
+        }
+
+        //Function that sets values in subtotal, vat and Total 
+        function SetValues(price) {
+            //find Current value in SubTotal then adding it with price of the current Class ticket and Setting it
+            const CurrentSubTotal = GetSubTotalValue("SubTotal");
+            const SubTotal = CurrentSubTotal + (price);
+            document.getElementById("SubTotal").innerText = SubTotal;
+
+            //calculating vat an Setting it
+            const Vat = SubTotal * .10;
+            document.getElementById("Vat").innerText = Vat;
+
+            //Calculating Total and Setting it
+            const Total = SubTotal + Vat;
+            document.getElementById("Total").innerText = Total;
+        }
+
+        //Function that  returns values from input 
+        function GetInputValue(InputBox) {
+            const CurrentNumber = document.getElementById(InputBox).value;
+            if (CurrentNumber == "") {
+                return 0;
+            }
+            const Number = parseFloat(CurrentNumber);
+            return Number;
+        }
+
+
+        //Function that returns Current Subtotal Values
+        function GetSubTotalValue(id) {
+            const CurrentSubTotal = document.getElementById(id).innerText;
+
+            return parseFloat(CurrentSubTotal);
+
+        }
+
+        //ACTIVITIES AFTER CLICKING BOOK_NOW > IT WILL SHOW AN ALERT MESSAGE WITH EVERY NECESSARY INFORMATION THEN INITIALIZE ALL PARAMETERS TO ZERO 
+        // 
+        document.getElementById("bookNow").addEventListener("click", function () {
+            const firstinput = GetInputValue("FirstClassBox");
+            const secondinput = GetInputValue("EconomyClassBox");
+            const price = document.getElementById("Total").innerText;
+            alert("Number Of first Class ticket = " + firstinput + "\nNumber of Economy class ticket = " + secondinput + "\nTotal Price = " + price + "\n");
+            
+            //after booking every varible go to it's initial stage
+            document.getElementById("Total").innerText = 0;
+            document.getElementById("SubTotal").innerText = 0;
+            document.getElementById("Vat").innerText = 0;
+            document.getElementById("FirstClassBox").value = "0";
+            document.getElementById("EconomyClassBox").value = "0";
+
+        })
+    </script>
 </body>
 
 </html>
