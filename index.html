@@ -60,18 +60,18 @@
             <div class="input-group f-class">
                 <div>
                     <label for="">First Class ($150)</label>
-                    <input class="inp-style inp-width" type="number" name="" id="FirstClassBox">
+                    <input class="inp-style inp-width" type="text" value="0" name="" id="FirstClassBox">
                 </div>
                 <div class="plus-minus-btn">
-                    <p><span class="Sign" id="FirstClassPlus">+</span> <span class="Sign"
-                            id="FirstClassMinus">-</span></p>
+                    <p><span class="Sign" id="FirstClassPlus">+</span> <span class="Sign" id="FirstClassMinus">-</span>
+                    </p>
                 </div>
             </div>
 
             <div class="input-group f-class">
                 <div>
                     <label for="">Economy ($100)</label>
-                    <input class="inp-style inp-width" type="number" name="" id="EconomyClassBox">
+                    <input class="inp-style inp-width" type="text" value="0" name="" id="EconomyClassBox">
                 </div>
                 <div class="plus-minus-btn">
                     <p><span id="EconomyClassPlus" class="Sign">+</span> <span class="Sign"
@@ -113,6 +113,16 @@
     <!--Thank You-->
     <!--JS starts here-->
     <script>
+
+        //GETTING values from INPUT and setting new value
+        document.getElementById("FirstClassBox").addEventListener("input", function () {
+            SetValues();
+        });
+
+        document.getElementById("EconomyClassBox").addEventListener("input", function () {
+            SetValues();
+        });
+
         //Getting Plus and Minus Sign eventListener
         const FirstPlus = document.getElementById("FirstClassPlus");
         FirstPlus.addEventListener("click", function () { PlusSign("FirstClassBox", 150); });
@@ -129,13 +139,11 @@
         //Function called when only PLUS  sign is clicked   
         function PlusSign(InputBox, price) {
             var incrementValue = GetInputValue(InputBox);
-            console.log(incrementValue);
             incrementValue++;
-            console.log(incrementValue);
             document.getElementById(InputBox).value = incrementValue;
             //for firdtclass price 150
             //FOR economy class price 100
-            SetValues(price);
+            SetValues();
 
         }
 
@@ -147,15 +155,18 @@
                 return;
             }
             document.getElementById(InputBox).value = decrementValue;
-            SetValues(-1 * price);
+            SetValues();
 
         }
 
         //Function that sets values in subtotal, vat and Total 
-        function SetValues(price) {
-            //find Current value in SubTotal then adding it with price of the current Class ticket and Setting it
-            const CurrentSubTotal = GetSubTotalValue("SubTotal");
-            const SubTotal = CurrentSubTotal + (price);
+        function SetValues() {
+            //find Current value in the input boxes then adding it with price of the current Class ticket and Setting it
+
+            var FirstClassCurrent = GetInputValue("FirstClassBox");
+            var EconomyClassCurrent = GetInputValue("EconomyClassBox");
+            const SubTotal = (FirstClassCurrent * 150) + (EconomyClassCurrent * 100);
+
             document.getElementById("SubTotal").innerText = SubTotal;
 
             //calculating vat an Setting it
@@ -173,27 +184,24 @@
             if (CurrentNumber == "") {
                 return 0;
             }
+
             const Number = parseFloat(CurrentNumber);
+            if (Number < 0) {
+                return 0;
+            }
+
             return Number;
-        }
-
-
-        //Function that returns Current Subtotal Values
-        function GetSubTotalValue(id) {
-            const CurrentSubTotal = document.getElementById(id).innerText;
-
-            return parseFloat(CurrentSubTotal);
-
         }
 
         //ACTIVITIES AFTER CLICKING BOOK_NOW > IT WILL SHOW AN ALERT MESSAGE WITH EVERY NECESSARY INFORMATION THEN INITIALIZE ALL PARAMETERS TO ZERO 
         // 
         document.getElementById("bookNow").addEventListener("click", function () {
+
             const firstinput = GetInputValue("FirstClassBox");
             const secondinput = GetInputValue("EconomyClassBox");
             const price = document.getElementById("Total").innerText;
             alert("Number Of first Class ticket = " + firstinput + "\nNumber of Economy class ticket = " + secondinput + "\nTotal Price = " + price + "\n");
-            
+
             //after booking every varible go to it's initial stage
             document.getElementById("Total").innerText = 0;
             document.getElementById("SubTotal").innerText = 0;
